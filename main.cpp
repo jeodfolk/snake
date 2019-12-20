@@ -9,7 +9,7 @@ int main(int argc, char** argv)
     {
     MainGame game;
     game.run();
-    game.showScreen();
+    // game.showScreen();
 
     return 1;
     }

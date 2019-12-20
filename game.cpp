@@ -32,9 +32,9 @@ void MainGame::run()
 
 void MainGame::initSystems()
     {
-        int nFieldWidth = 12;
-int nFieldHeight = 18;
-unsigned char *pField = nullptr;
+    int nFieldWidth = 12;
+    int nFieldHeight = 18;
+    unsigned char *pField = nullptr;
     wchar_t *screen = new wchar_t[screenWidth*screenHeight];
 	for (int i = 0; i < screenWidth*screenHeight; i++) screen[i] = L' ';
 	HANDLE hConsole = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE, 0, NULL, CONSOLE_TEXTMODE_BUFFER, NULL);
@@ -47,6 +47,9 @@ unsigned char *pField = nullptr;
 			pField[y*nFieldWidth + x] = (x == 0 || x == nFieldWidth - 1 || y == nFieldHeight - 1) ? 9 : 0;
     while(true)
         {
+        for (int x = 0; x < nFieldWidth; x++)
+			for (int y = 0; y < nFieldHeight; y++)
+				screen[(y + 2)*screenWidth + (x + 2)] = L'x';
         WriteConsoleOutputCharacter(hConsole, screen, screenWidth * screenHeight, { 0,0 }, &dwBytesWritten);
         }
     }

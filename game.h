@@ -17,6 +17,6 @@ class MainGame
         int snakePosX;
         int snakePosY;
 
-        int screenWidth = 15;
-        int screenHeight = 50;
+        int screenWidth;
+        int screenHeight;
     };
