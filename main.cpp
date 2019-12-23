@@ -1,9 +1,10 @@
 #include <iostream>
 #include <stdio.h>
-#include <Windows.h>
 #include "game.h"
+#include <Windows.h>
 
 using namespace std;
+
 
 int main(int argc, char** argv)
     {

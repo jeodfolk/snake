@@ -1,22 +1,24 @@
 #include <iostream>
 #include <stdio.h>
 #include <vector>
+#include <Windows.h>
+#include <ctime>
 #include "game.h"
 
-#ifndef UNICODE
-#define UNICODE
-#define UNICODE_WAS_UNDEFINED
-#endif
-#include <Windows.h>
-
-
+using namespace std;
 
 MainGame::MainGame()
     {
-    snakePosX = 0;
-    snakePosY = 0;
-    int screenWidth = 15;
-    int screenHeight = 50;
+    mapHeight = 20;
+    mapWidth = 50;
+    snakePos = (mapHeight*mapWidth)/2;
+    map = new char [20*50];
+    for(int i=0; i<1000; i++)
+        {
+        map[i] = ' ';
+        }
+    map[snakePos] = char(219);
+    cout << map[snakePos] << endl;
     return;
     }
 
@@ -27,38 +29,45 @@ MainGame::~MainGame()
 
 void MainGame::run()
     {
-    initSystems();
-    }
-
-void MainGame::initSystems()
-    {
-    int nFieldWidth = 12;
-    int nFieldHeight = 18;
-    unsigned char *pField = nullptr;
-    wchar_t *screen = new wchar_t[screenWidth*screenHeight];
-	for (int i = 0; i < screenWidth*screenHeight; i++) screen[i] = L' ';
-	HANDLE hConsole = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE, 0, NULL, CONSOLE_TEXTMODE_BUFFER, NULL);
-	SetConsoleActiveScreenBuffer(hConsole);
-	DWORD dwBytesWritten = 0;
-
-    pField = new unsigned char[nFieldWidth*nFieldHeight]; // Create play field buffer
-	for (int x = 0; x < nFieldWidth; x++) // Board Boundary
-		for (int y = 0; y < nFieldHeight; y++)
-			pField[y*nFieldWidth + x] = (x == 0 || x == nFieldWidth - 1 || y == nFieldHeight - 1) ? 9 : 0;
     while(true)
         {
-        for (int x = 0; x < nFieldWidth; x++)
-			for (int y = 0; y < nFieldHeight; y++)
-				screen[(y + 2)*screenWidth + (x + 2)] = L'x';
-        WriteConsoleOutputCharacter(hConsole, screen, screenWidth * screenHeight, { 0,0 }, &dwBytesWritten);
+        display();
+        Sleep(2000);
+        system("cls");
         }
     }
 
-void MainGame::showScreen()
+void MainGame::display()
     {
+    //Screen setup
+    //top
+    cout << ' ';
+    for(int i=0; i<mapWidth; i++)
+        {
+        cout << char(95);
+        }
+    cout << endl;
+    //body
+    for(int j=0; j<mapHeight; j++)
+        {
+        //l side
+        cout << char(186);
+        for(int i=0; i<mapWidth; i++)
+            {
+            cout << map[i];
+            }
+        //r side
+        cout << char(186);
+        cout << endl;
+    //bottom
+        }
+    cout << ' ';
+    for(int i=0; i<mapWidth; i++)
+        {
+        cout << char(196);
+        }
 
     }
 
-#ifdef UNICODE_WAS_UNDEFINED
-#undef UNICODE
-#endif
+
+
