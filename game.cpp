@@ -2,10 +2,16 @@
 #include <stdio.h>
 #include <vector>
 #include <Windows.h>
-#include <ctime>
+#include <conio.h>
+#include <time.h>
 #include "game.h"
 
 using namespace std;
+#define KEY_ARROW_CHAR1 224
+#define KEY_UP 72
+#define KEY_DOWN 80
+#define KEY_LEFT 75
+#define KEY_RIGHT 77
 
 MainGame::MainGame()
     {
@@ -17,7 +23,7 @@ MainGame::MainGame()
         {
         map[i] = ' ';
         }
-    map[snakePos] = char(219);
+    map[snakePos] = char(254);
     cout << map[snakePos] << endl;
     return;
     }
@@ -29,10 +35,37 @@ MainGame::~MainGame()
 
 void MainGame::run()
     {
+    int ch;
     while(true)
         {
         display();
-        Sleep(2000);
+        ch = getInput();
+        cout << ch << endl;
+        Sleep(500);
+        if(ch == KEY_DOWN)
+            {
+            map[snakePos] = ' ';
+            snakePos = snakePos+2;
+            map[snakePos] = char(254);
+            }
+        else if(ch == KEY_UP)
+            {
+            map[snakePos] = ' ';
+            snakePos = snakePos+2;
+            map[snakePos] = char(254);
+            }
+        else if(ch == KEY_LEFT)
+            {
+            map[snakePos] = ' ';
+            snakePos = snakePos+2;
+            map[snakePos] = char(254);
+            }
+        else if(ch == KEY_RIGHT)
+            {
+            map[snakePos] = ' ';
+            snakePos = snakePos+2;
+            map[snakePos] = char(254);
+            }
         system("cls");
         }
     }
@@ -40,6 +73,7 @@ void MainGame::run()
 void MainGame::display()
     {
     //Screen setup
+    int count = 0;
     //top
     cout << ' ';
     for(int i=0; i<mapWidth; i++)
@@ -54,7 +88,8 @@ void MainGame::display()
         cout << char(186);
         for(int i=0; i<mapWidth; i++)
             {
-            cout << map[i];
+            cout << map[count];
+            count++;
             }
         //r side
         cout << char(186);
@@ -67,6 +102,24 @@ void MainGame::display()
         cout << char(196);
         }
 
+    }
+
+int MainGame::getInput()
+    {
+    while(1)
+        {
+        if (kbhit())
+            {
+            if(!getch())
+                {
+                return getch();
+                }
+            }
+        else
+            {
+            return -1;
+            }
+        }
     }
 
 

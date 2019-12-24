@@ -12,6 +12,7 @@ class MainGame
 
         void run();
         void display();
+        int getInput();
 
     private:
         int snakePos;
