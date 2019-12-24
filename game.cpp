@@ -40,7 +40,6 @@ void MainGame::run()
         {
         display();
         ch = getInput();
-        cout << ch << endl;
         Sleep(500);
         if(ch == KEY_DOWN)
             {
