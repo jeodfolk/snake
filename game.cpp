@@ -19,11 +19,9 @@ MainGame::MainGame()
     direction = 2;
     snakePos = (mapHeight*mapWidth)/2;
     map = new char [20*50];
+    apple = 526;
 
-    Snake *firstSeg = new Snake;
-    firstSeg->design = char(254);
-    firstSeg->nextSeg = NULL;
-    firstSeg->prevSeg = NULL;
+    Snake *firstSeg = new Snake(NULL, NULL, char(254), 500);
     head = firstSeg;
 
     for(int i=0; i<1000; i++)
@@ -31,7 +29,7 @@ MainGame::MainGame()
         map[i] = ' ';
         }
     map[snakePos] = firstSeg->design;
-    map[525] = char(233);
+    map[apple] = char(233);
     return;
     }
 
@@ -108,9 +106,10 @@ void MainGame::movement(int ch)
     {
     if(ch == KEY_DOWN)
         {
-        if(map[snakePos] == char(233))
+        if(map[apple] == head->design)
             {
             collision();
+            genApple();
             }
         else
             {
@@ -122,9 +121,10 @@ void MainGame::movement(int ch)
         }
     else if(ch == KEY_UP)
         {
-        if(map[snakePos] == char(233))
+        if(map[apple] == head->design)
             {
             collision();
+            genApple();
             }
         else
             {
@@ -137,9 +137,10 @@ void MainGame::movement(int ch)
         }
     else if(ch == KEY_LEFT)
         {
-        if(map[snakePos] == char(233))
+        if(map[apple] == head->design)
             {
             collision();
+            genApple();
             }
         else
             {
@@ -151,9 +152,10 @@ void MainGame::movement(int ch)
         }
     else if(ch == KEY_RIGHT)
         {
-        if(map[snakePos] == char(233))
+        if(map[apple] == head->design)
             {
             collision();
+            genApple();
             }
         else
             {
@@ -165,9 +167,10 @@ void MainGame::movement(int ch)
         }
     else
         {
-        if(map[snakePos] == char(233))
+        if(map[apple] == head->design)
             {
             collision();
+            genApple();
             }
         else
             {
@@ -180,10 +183,32 @@ void MainGame::movement(int ch)
 
 void MainGame::collision()
     {
-    Snake *newSeg = new Snake;
-    newSeg->nextSeg = head;
-    char design = newSeg->design = char(254);
-    map[snakePos] = design;
+    if(apple == 526)
+        {
+        Snake *newSeg = new Snake(head, NULL, char(254), );
+        head->prevSeg = newSeg;
+        map[snakePos] = newSeg->design;
+        }
+    else
+        {
+        Snake *newSeg = new Snake(head, head->prevSeg, char(254));
+        newSeg->prevSeg->nextSeg = newSeg;
+        map[snakePos] = newSeg->design;
+        }
+    }
+
+void MainGame::genApple()
+    {
+    srand(time(NULL));
+    while(1)
+        {
+        apple = rand()%1000;
+        if(map[apple] == ' ' && apple%2 == 0)
+            {
+            map[apple] = char(233);
+            return;
+            }
+        }
     }
 
 
