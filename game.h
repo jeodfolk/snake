@@ -30,7 +30,6 @@ class MainGame
     private:
         Snake *head;
         Snake *tail;
-        int snakePos;
         int mapHeight;
         int mapWidth;
         char *map;

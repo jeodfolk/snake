@@ -17,7 +17,6 @@ MainGame::MainGame()
     mapHeight = 20;
     mapWidth = 50;
     direction = 2;
-    snakePos = (mapHeight*mapWidth)/2;
     map = new char [20*50];
     apple = 526;
 
@@ -28,7 +27,7 @@ MainGame::MainGame()
         {
         map[i] = ' ';
         }
-    map[snakePos] = firstSeg->design;
+    map[head->coord] = firstSeg->design;
     map[apple] = char(233);
     return;
     }
@@ -48,6 +47,7 @@ void MainGame::run()
         ch = getInput();
         Sleep(500);
         movement(ch);
+        
         }
     }
 
@@ -104,6 +104,7 @@ int MainGame::getInput()
 
 void MainGame::movement(int ch)
     {
+    int coord = head->coord;
     if(ch == KEY_DOWN)
         {
         if(map[apple] == head->design)
@@ -113,10 +114,10 @@ void MainGame::movement(int ch)
             }
         else
             {
-            map[snakePos] = ' ';
+            map[coord] = ' ';
             }
-        snakePos = snakePos+mapWidth;
-        map[snakePos] = char(254);
+        coord = coord+mapWidth;
+        map[coord] = char(254);
         direction = mapWidth;
         }
     else if(ch == KEY_UP)
@@ -128,11 +129,11 @@ void MainGame::movement(int ch)
             }
         else
             {
-            map[snakePos] = ' ';
+            map[coord] = ' ';
             }
         
-        snakePos = snakePos-mapWidth;
-        map[snakePos] = char(254);
+        coord = coord-mapWidth;
+        map[coord] = char(254);
         direction = -mapWidth;
         }
     else if(ch == KEY_LEFT)
@@ -144,10 +145,10 @@ void MainGame::movement(int ch)
             }
         else
             {
-            map[snakePos] = ' ';
+            map[coord] = ' ';
             }
-        snakePos = snakePos-2;
-        map[snakePos] = char(254);
+        coord = coord-2;
+        map[coord] = char(254);
         direction = -2;
         }
     else if(ch == KEY_RIGHT)
@@ -159,10 +160,10 @@ void MainGame::movement(int ch)
             }
         else
             {
-            map[snakePos] = ' ';
+            map[coord] = ' ';
             }
-        snakePos = snakePos+2;
-        map[snakePos] = char(254);
+        coord = coord+2;
+        map[coord] = char(254);
         direction = 2;
         }
     else
@@ -174,26 +175,36 @@ void MainGame::movement(int ch)
             }
         else
             {
-            map[snakePos] = ' ';
+            map[coord] = ' ';
             }
-        snakePos = snakePos + direction;
-        map[snakePos] = char(254); 
+        coord = coord + direction;
+        map[coord] = char(254); 
         } 
+    map[tail->coord] = ' ';
+    tail->coord = tail->nextSeg->coord;
+    head->coord = coord;
+    Snake *temp = head;
+    while(temp)
+        {
+        map[temp->coord] = char(254);
+        temp = temp->prevSeg;
+        }
     }
 
 void MainGame::collision()
     {
     if(apple == 526)
         {
-        Snake *newSeg = new Snake(head, NULL, char(254), );
+        Snake *newSeg = new Snake(head, NULL, char(254), head->coord);
         head->prevSeg = newSeg;
-        map[snakePos] = newSeg->design;
+        map[head->coord] = newSeg->design;
+        newSeg = tail;
         }
     else
         {
-        Snake *newSeg = new Snake(head, head->prevSeg, char(254));
+        Snake *newSeg = new Snake(head, head->prevSeg, char(254), head->coord);
         newSeg->prevSeg->nextSeg = newSeg;
-        map[snakePos] = newSeg->design;
+        map[head->coord] = newSeg->design;
         }
     }
 
