@@ -22,6 +22,8 @@ MainGame::MainGame()
 
     Snake *firstSeg = new Snake(NULL, NULL, char(254), 500);
     head = firstSeg;
+    tail = firstSeg;
+    tail->nextSeg = head;
 
     for(int i=0; i<1000; i++)
         {
@@ -47,7 +49,6 @@ void MainGame::run()
         ch = getInput();
         Sleep(500);
         movement(ch);
-        
         }
     }
 
@@ -180,6 +181,7 @@ void MainGame::movement(int ch)
         coord = coord + direction;
         map[coord] = char(254); 
         } 
+
     map[tail->coord] = ' ';
     tail->coord = tail->nextSeg->coord;
     head->coord = coord;
@@ -204,6 +206,7 @@ void MainGame::collision()
         {
         Snake *newSeg = new Snake(head, head->prevSeg, char(254), head->coord);
         newSeg->prevSeg->nextSeg = newSeg;
+        head->prevSeg = newSeg;
         map[head->coord] = newSeg->design;
         }
     }
