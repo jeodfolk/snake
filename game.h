@@ -23,7 +23,7 @@ class MainGame
         void run();
         void display();
         int getInput();
-        void movement(int ch);
+        void movement(int ch, std::ofstream &sfile);
         void collision();
         void genApple();
 
@@ -35,4 +35,6 @@ class MainGame
         char *map;
         int direction;
         int apple;
+        bool flag;
+        char state;
     };
