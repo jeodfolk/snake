@@ -21,6 +21,7 @@ MainGame::MainGame()
     mapHeight = 20;
     mapWidth = 50;
     direction = 2;
+    score = 0;
     map = new char [20*50];
     apple = 526;
     state = STATE_TAIL_MOVE;
@@ -41,6 +42,7 @@ MainGame::MainGame()
 
 MainGame::~MainGame()
     {
+    delete map;
     return;
     }
 
@@ -120,7 +122,7 @@ void MainGame::movement(int ch, ofstream &sfile)
             collision();
             genApple();
             }
-        coord = coord+mapWidth;
+        coord += mapWidth;
         direction = mapWidth;
         }
     else if(ch == KEY_UP)
@@ -130,7 +132,7 @@ void MainGame::movement(int ch, ofstream &sfile)
             collision();
             genApple();
             }
-        coord = coord-mapWidth;
+        coord -= mapWidth;
         direction = -mapWidth;
         }
     else if(ch == KEY_LEFT)
@@ -140,7 +142,7 @@ void MainGame::movement(int ch, ofstream &sfile)
             collision();
             genApple();
             }
-        coord = coord-2;
+        coord -= 2;
         direction = -2;
         }
     else if(ch == KEY_RIGHT)
@@ -150,7 +152,7 @@ void MainGame::movement(int ch, ofstream &sfile)
             collision();
             genApple();
             }
-        coord = coord+2;
+        coord += 2;
         direction = 2;
         }
     else
@@ -160,54 +162,36 @@ void MainGame::movement(int ch, ofstream &sfile)
             collision();
             genApple();
             }
-        coord = coord + direction;
+        coord += direction;
         } 
-    
-
-    // if(!flag)
-    //     {
-    //     map[tail->coord] = ' ';
-    //     tail->coord = tail->nextSeg->coord;
-    //     head->coord = coord;
-    //     }
-    // else
-    //     {
-    //     head->prevSeg->coord = head->coord;
-    //     tail->coord = tail->nextSeg->coord;
-    //     head->coord = coord;
-    //     }   
     
     switch(state)
         {
         case STATE_TAIL_MOVE:
-                sfile<<"tail move " << state << endl;
             map[tail->coord] = ' ';
             tail->coord = tail->nextSeg->coord;
-            head->coord = coord;
             break;
         case STATE_TAIL_NO_MOVE:
-                sfile<<"tail no move " << state << endl;
-            head->prevSeg->coord = head->coord;
-            head->coord = coord;
             state = STATE_TAIL_BODY_MOVE;
             break;
         case STATE_TAIL_BODY_MOVE:
-                sfile<<"tailbody move " << state << endl;
             map[tail->coord] = ' ';
-            head->prevSeg->coord = head->coord;
             tail->coord = tail->nextSeg->coord;
-            head->coord = coord;
+            head->prevSeg->coord = head->coord;
             break;
         default:
             break;
         }
-        
+
+    head->coord = coord;
     Snake *temp = head;
     while(temp)
         {
         map[temp->coord] = char(254);
+        // temp->coord = temp->nextSeg->coord;
         temp = temp->prevSeg;
         }
+    delete temp;
     }
 
 void MainGame::collision()
@@ -216,16 +200,18 @@ void MainGame::collision()
         {
         Snake *newSeg = new Snake(head, NULL, char(254), head->coord);
         head->prevSeg = newSeg;
-        map[head->coord] = newSeg->design;
         tail = newSeg;
+        score += 1;
+        return;
         }
     else
         {
         Snake *newSeg = new Snake(head, head->prevSeg, char(254), head->coord);
         newSeg->prevSeg->nextSeg = newSeg;
         head->prevSeg = newSeg;
-        map[head->coord] = newSeg->design;
         state = STATE_TAIL_NO_MOVE;
+        score += 1;
+        return;
         }
     }
 

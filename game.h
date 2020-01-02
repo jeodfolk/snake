@@ -37,4 +37,5 @@ class MainGame
         int apple;
         bool flag;
         char state;
+        int score;
     };
